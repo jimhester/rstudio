@@ -15,6 +15,7 @@
 package org.rstudio.studio.client.pdfviewer;
 
 import org.rstudio.core.client.Point;
+import org.rstudio.core.client.URIUtils;
 import org.rstudio.core.client.dom.WindowEx;
 import org.rstudio.core.client.widget.Operation;
 import org.rstudio.core.client.widget.OperationWithInput;
@@ -253,7 +254,8 @@ public class PDFViewer implements CompilePdfCompletedEvent.Handler,
       {
           // open the window and continue
           String viewerUrl = 
-                server_.getApplicationURL("pdf_js/web/viewer.html?file=");
+                server_.getApplicationURL("pdf_js/web/viewer.html");
+          viewerUrl = URIUtils.addQueryParam(viewerUrl, "file", "");
           NewWindowOptions options = new NewWindowOptions();
           options.setName(WINDOW_NAME);
           options.setShowDesktopToolbar(false);

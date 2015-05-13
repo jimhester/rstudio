@@ -19,6 +19,11 @@ import com.google.gwt.http.client.URL;
 
 public class URIUtils
 {
+   public static String addQueryParam(String url, String name, int value)
+   {
+      return addQueryParam(url, name, "" + value);
+   }
+   
    public static String addQueryParam(String url, String name, String value)
    {
       // first split into base and anchor

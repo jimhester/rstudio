@@ -23,6 +23,7 @@ import org.rstudio.core.client.CsvReader;
 import org.rstudio.core.client.CsvWriter;
 import org.rstudio.core.client.command.CommandBinder;
 import org.rstudio.core.client.command.Handler;
+import org.rstudio.studio.client.application.ApplicationContext;
 import org.rstudio.studio.client.application.events.EventBus;
 import org.rstudio.studio.client.workbench.WorkbenchList;
 import org.rstudio.studio.client.workbench.WorkbenchListManager;
@@ -215,6 +216,11 @@ public class Help extends BasePresenter implements ShowHelpHandler
    private String getApplicationRelativeHelpUrl(String helpUrl)
    {
       String appUrl = server_.getApplicationURL("");
+      
+      // normalize helpUrl and appUrl to have no context id
+      helpUrl = ApplicationContext.getUrlWithoutContext(helpUrl);
+      appUrl = ApplicationContext.getUrlWithoutContext(appUrl);
+      
       if (helpUrl.startsWith(appUrl) && !helpUrl.equals(appUrl))
          return helpUrl.substring(appUrl.length());
       else

@@ -803,7 +803,7 @@ void handleRpcRequest(const core::json::JsonRpcRequest& request,
 
 bool isMethod(const std::string& uri, const std::string& method)
 {
-   return boost::algorithm::ends_with(uri, method);
+   return boost::algorithm::contains(uri, "/rpc/" + method);
 }
 
 bool isMethod(boost::shared_ptr<HttpConnection> ptrConnection,

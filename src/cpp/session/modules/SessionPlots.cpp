@@ -513,6 +513,11 @@ void handleZoomRequest(const http::Request& request, http::Response* pResponse)
    // get the scale parameter
    int scale = request.queryParamValue("scale", 1);
 
+   // get the ctx parameter (if we have one)
+   std::string ctx = request.queryParamValue("ctx");
+   if (!ctx.empty())
+      ctx = "&ctx=" + ctx;
+
    // define template
    std::stringstream templateStream;
    templateStream <<
@@ -537,13 +542,13 @@ void handleZoomRequest(const http::Request& request, http::Response* pResponse)
                      "window.location.href = "
                         "\"plot_zoom?width=\" + document.body.clientWidth "
                               " + \"&height=\" + document.body.clientHeight "
-                              " + \"&scale=\" + #scale#;"
+                              " + \"&scale=\" + #scale# + \"#!ctx#\";"
                    "}, 300);"
                "}"
             "</script>"
          "</head>"
          "<body style=\"margin: 0; overflow: hidden\">"
-            "<img id=\"plot\" width=\"100%\" height=\"100%\" src=\"plot_zoom_png?width=#width#&height=#height#\"/>"
+            "<img id=\"plot\" width=\"100%\" height=\"100%\" src=\"plot_zoom_png?width=#width#&height=#height##!ctx#\"/>"
          "</body>"
       "</html>";
 
@@ -551,7 +556,8 @@ void handleZoomRequest(const http::Request& request, http::Response* pResponse)
    std::map<std::string,std::string> variables;
    variables["width"] = safe_convert::numberToString(width);
    variables["height"] = safe_convert::numberToString(height);
-   variables["scale"] = safe_convert::numberToString(scale);;
+   variables["scale"] = safe_convert::numberToString(scale);
+   variables["ctx"] = ctx;
    text::TemplateFilter filter(variables);
 
    pResponse->setNoCacheHeaders();

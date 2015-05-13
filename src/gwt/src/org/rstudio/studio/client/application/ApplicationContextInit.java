@@ -15,15 +15,11 @@
 
 package org.rstudio.studio.client.application;
 
-
-import org.rstudio.core.client.URIUtils;
-import org.rstudio.core.client.regex.Pattern;
 import org.rstudio.studio.client.application.model.ApplicationServerOperations;
 import org.rstudio.studio.client.common.GlobalDisplay;
 import org.rstudio.studio.client.server.ServerError;
 import org.rstudio.studio.client.server.ServerRequestCallback;
 
-import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
@@ -53,8 +49,8 @@ public class ApplicationContextInit
       else
       {
          // get project and context id url parameters
-         String project = Window.Location.getParameter("proj");
-         final String contextId = Window.Location.getParameter("ctx");
+         String project = ApplicationContext.getProject();
+         final String contextId = ApplicationContext.getContextId();
          server_.contextInit(project, contextId, 
                              new ServerRequestCallback<String>() {
                
@@ -77,21 +73,10 @@ public class ApplicationContextInit
                   // get the url
                   String url = Window.Location.getHref();
                   
-                  // if we already have a context id then just replace it
-                  if (url.contains("ctx="))
-                  {
-                     responseContextId = URL.encodeQueryString(responseContextId);
-                     url = Pattern.replace("ctx=[\\w]+", 
-                                           "ctx=" + responseContextId, 
-                                           true);
-                  }
-                  else 
-                  {
-                     url = URIUtils.addQueryParam(url, 
-                                                  "ctx", 
-                                                  responseContextId);
-                  }
-                  
+                  // add or replace context
+                  url = ApplicationContext.getUrlWithContext(url, 
+                                                             responseContextId);
+                   
                   // reload
                   Window.Location.replace(url);
                }

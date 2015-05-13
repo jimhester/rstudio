@@ -27,6 +27,7 @@ import org.rstudio.core.client.widget.OperationWithInput;
 import org.rstudio.core.client.widget.ProgressIndicator;
 import org.rstudio.core.client.widget.ProgressOperation;
 import org.rstudio.core.client.widget.ProgressOperationWithInput;
+import org.rstudio.studio.client.application.ApplicationContext;
 import org.rstudio.studio.client.application.Desktop;
 import org.rstudio.studio.client.application.events.EventBus;
 import org.rstudio.studio.client.common.FileDialogs;
@@ -153,7 +154,10 @@ public class ViewerPresenter extends BasePresenter
          else if (ensureHeight > 0)
             display_.ensureHeight(ensureHeight);
          
-         navigate(event.getURL());
+         // ensure the URL has a context Id
+         String url = event.getURL();
+         url = ApplicationContext.getUrlWithContext(url);
+         navigate(url);
          
          if (event.isHTMLWidget())
             updateZoomWindow(display_.getUrl());

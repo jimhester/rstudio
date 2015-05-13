@@ -29,6 +29,7 @@ import com.google.inject.Provider;
 import org.rstudio.core.client.BrowseCap;
 import org.rstudio.core.client.Point;
 import org.rstudio.core.client.Size;
+import org.rstudio.core.client.URIUtils;
 import org.rstudio.core.client.dom.WindowEx;
 import org.rstudio.core.client.files.FileSystemItem;
 import org.rstudio.core.client.widget.HasCustomizableToolbar;
@@ -422,11 +423,11 @@ public class Plots extends BasePresenter implements PlotsChangedHandler,
          scale = 0;
       
       // compose url string
-      String url = server_.getGraphicsUrl("plot_zoom?" +
-                                          "width=" + windowSize.width + "&" +
-                                          "height=" + windowSize.height + "&" +
-                                          "scale=" + scale);
-
+      String url = server_.getGraphicsUrl("plot_zoom");
+      url = URIUtils.addQueryParam(url, "width", windowSize.width);
+      url = URIUtils.addQueryParam(url, "height", windowSize.height);
+      url = URIUtils.addQueryParam(url, "scale", scale);
+                                         
       // open the window
       ZoomUtils.openZoomWindow(
          "_rstudio_zoom", 

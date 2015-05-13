@@ -20,6 +20,8 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+
+import org.rstudio.core.client.URIUtils;
 import org.rstudio.core.client.command.AppCommand;
 import org.rstudio.core.client.command.CommandHandler;
 import org.rstudio.core.client.dom.WindowEx;
@@ -243,7 +245,7 @@ public class DefaultGlobalDisplay extends GlobalDisplay
                                   OperationWithInput<WindowEx> openOperation)
    {
       String url = server_.getApplicationURL("progress");
-      url += "?message=" + URL.encodeQueryString(message);
+      url = URIUtils.addQueryParam(url, "message", message);
       NewWindowOptions options = new NewWindowOptions();
       options.setName(name);
       options.setCallback(openOperation);
